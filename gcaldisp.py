@@ -4,11 +4,6 @@ import argparse
 # "stephan" matches both jon.stephan@sifive.com and Stephan Oberlin Merged
 # gcalcli agenda --tsv --details calendar --calendar stephan > mycal.tsv
 
-start_time = "07:00"
-stop_time = "22:00"
-step=30
-header_row=False
-
 NC='\033[0m'
 # Background
 REDBG='\033[0;41m'
@@ -53,8 +48,14 @@ def get_active_col_index(active_cols, name):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-r', '--header_row',action='store_true')
+    parser.add_argument('-s', '--start_time',default = "07:00")
+    parser.add_argument('-t', '--stop_time',default = "22:00")
+    parser.add_argument('-e', '--step_time',default = 30)
     args = parser.parse_args()
     header_row = args.header_row
+    start_time = args.start_time
+    stop_time = args.stop_time
+    step = int(args.step_time)
 
 
     f = open("mycal.tsv")
