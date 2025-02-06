@@ -4,8 +4,9 @@ import shutil
 # gcalcli agenda --tsv --details calendar --calendar stephan > mycal.tsv
 
 start_time = "07:00"
-stop_time = "18:00"
-step=15
+stop_time = "22:00"
+step=30
+header_row=False
 
 def strtime_to_int(strtime):
 #    print(f"splitting {strtime}")
@@ -24,10 +25,12 @@ def int_to_strtime(inttime):
 f = open("mycal.tsv")
 i=0
 cal = []
+if header_row == False:
+   header=['start_date','start_time','end_date','end_time','title','calendar']
 for line in f:
     l = line.replace("\n","").split('\t')
 
-    if i == 0:
+    if i == 0 and header_row:
         header = l
     else:
         row = {}
@@ -37,6 +40,7 @@ for line in f:
         cal.append(row)
     # print(f"Line:{i}:{l}")
     i+=1
+
 
 print("processing calendar")
 dates = []
@@ -106,10 +110,10 @@ for t in range( strtime_to_int(start_time), strtime_to_int(stop_time), step):
             item_name = cal[i]['title']
             if cal[i]['start_date'] == date and (cal[i]['start_time_int'] <= t) and (cal[i]['end_time_int'] > t):
                     busy= True
-                    if cal[i]['calendar'] == "jon.stephan@sifive.com":
-                        color = REDBG
-                    else:
+                    if cal[i]['calendar'] == "Stephan Oberlin Merged":
                         color = PURPLEBG
+                    else:
+                        color = REDBG
                     if isin_active_col_names(active_columns[date], item_name):
                         c = get_active_col_index(active_columns[date], item_name)
                         active_columns[date][c]['firstrow'] = False
@@ -144,3 +148,4 @@ for t in range( strtime_to_int(start_time), strtime_to_int(stop_time), step):
             rowstr += " " * daywidth + "│"
             active_columns[date] = []
     print( f"{int_to_strtime(t)} {rowstr}" )
+
