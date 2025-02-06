@@ -1,5 +1,6 @@
 import shutil
 import argparse
+import datetime
 
 # "stephan" matches both jon.stephan@sifive.com and Stephan Oberlin Merged
 # gcalcli agenda --tsv --details calendar --calendar stephan > mycal.tsv
@@ -56,6 +57,7 @@ def main():
     start_time = args.start_time
     stop_time = args.stop_time
     step = int(args.step_time)
+
 
 
     f = open("mycal.tsv")
@@ -157,6 +159,10 @@ def main():
             else:
                 rowstr += " " * daywidth + "│"
                 active_columns[date] = []
+        now_t = datetime.datetime.now()
+        now = now_t.hour * 60 + now_t.minute
+        if now > t and now < t + step:
+            rowstr = rowstr.replace(" ","-")
         print( f"{int_to_strtime(t)} {rowstr}" )
 
 if __name__ == '__main__':
