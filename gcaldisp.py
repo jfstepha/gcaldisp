@@ -7,9 +7,12 @@ import datetime
 
 NC='\033[0m'
 RED='\033[0;31m'
+BLUE='\033[0;34m'
+GREEN='\033[0;32m'
 # Background
 REDBG='\033[0;41m'
 PURPLEBG='\033[0;45m'
+BLUEBG='\033[0;44m'
 
 def strtime_to_int(strtime):
 #    print(f"splitting {strtime}")
@@ -172,9 +175,9 @@ def main():
                 active_columns[date] = []
         now_t = datetime.datetime.now()
         now = now_t.hour * 60 + now_t.minute
-        if now > t and now < t + step:
-            rowstr = rowstr.replace(" ",f"{RED}-")
-            color=REDBG
+        if now >= t and now < t + step:
+            rowstr = rowstr.replace("  ",f"{GREEN}--")
+            color=BLUEBG
         else:
             color=NC
         print( f"{color}{int_to_strtime(t)}{NC} {rowstr}" )
