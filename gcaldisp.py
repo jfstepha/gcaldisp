@@ -103,15 +103,20 @@ def main():
     daywidth = int(term_columns / len(dates)) - 5
     print(f"daywidth={daywidth}")
 
-    rowstr="          "
+    rowstr="      "
     for date in dates:
-        rowstr += f"{date}"+" "*(daywidth-len(date))
+        rowstr += f"| {date}"+" "*(daywidth-len(date)-1) 
+    print(rowstr)
+
+    rowstr="      "
+    for date in dates:
+        weekday=datetime.date.fromisoformat(date).strftime("%A")
+        rowstr += f"| {weekday}" + " " * (daywidth-len(weekday)-1)
     print(rowstr)
 
     rowstr="          "
     for date in dates:
-        weekday=datetime.date.fromisoformat(date).strftime("%A")
-        rowstr += f"{weekday}" + " " * (daywidth-len(weekday))
+        rowstr += "=" * (daywidth)
     print(rowstr)
 
     active_columns={}
