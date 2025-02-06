@@ -6,6 +6,7 @@ import datetime
 # gcalcli agenda --tsv --details calendar --calendar stephan > mycal.tsv
 
 NC='\033[0m'
+RED='\033[0;31m'
 # Background
 REDBG='\033[0;41m'
 PURPLEBG='\033[0;45m'
@@ -105,7 +106,12 @@ def main():
     rowstr="          "
     for date in dates:
         rowstr += f"{date}"+" "*(daywidth-len(date))
+    print(rowstr)
 
+    rowstr="          "
+    for date in dates:
+        weekday=datetime.date.fromisoformat(date).strftime("%A")
+        rowstr += f"{weekday}" + " " * (daywidth-len(weekday))
     print(rowstr)
 
     active_columns={}
@@ -162,8 +168,11 @@ def main():
         now_t = datetime.datetime.now()
         now = now_t.hour * 60 + now_t.minute
         if now > t and now < t + step:
-            rowstr = rowstr.replace(" ","-")
-        print( f"{int_to_strtime(t)} {rowstr}" )
+            rowstr = rowstr.replace(" ",f"{RED}-")
+            color=REDBG
+        else:
+            color=NC
+        print( f"{color}{int_to_strtime(t)}{NC} {rowstr}" )
 
 if __name__ == '__main__':
         main()  # next section explains the use of sys.exit
