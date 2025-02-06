@@ -1,4 +1,5 @@
 import shutil
+import argparse
 
 # "stephan" matches both jon.stephan@sifive.com and Stephan Oberlin Merged
 # gcalcli agenda --tsv --details calendar --calendar stephan > mycal.tsv
@@ -50,6 +51,12 @@ def get_active_col_index(active_cols, name):
     return retval
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-r', '--header_row',action='store_true')
+    args = parser.parse_args()
+    header_row = args.header_row
+
+
     f = open("mycal.tsv")
     i=0
     cal = []
