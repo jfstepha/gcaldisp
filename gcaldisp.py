@@ -56,6 +56,9 @@ def main():
     parser.add_argument('-s', '--start_time',default = "07:00")
     parser.add_argument('-t', '--stop_time',default = "22:00")
     parser.add_argument('-e', '--step_time',default = 30)
+    parser.add_argument('-w', '--width', type=int, help='Display width in columns. Defaults to terminal width if not specified.')
+    parser.add_argument('-i', '--input_filename', default="mycal.tsv")
+    
     args = parser.parse_args()
     header_row = args.header_row
     start_time = args.start_time
@@ -64,7 +67,7 @@ def main():
 
 
 
-    f = open("mycal.tsv")
+    f = open(args.input_filename)
     i=0
     cal = []
     if header_row == False:
@@ -80,7 +83,7 @@ def main():
                 row[header[c]] = l[c]
 
             cal.append(row)
-        # print(f"Line:{i}:{l}")
+        print(f"Line:{i}:{l}")
         i+=1
 
 
@@ -97,12 +100,11 @@ def main():
             cal[i]['start_time_int'] = 0
             cal[i]['end_time_int'] = 0
 
-    #print(f"calendar={cal}")
+    print(f"calendar={cal}")
 
 
 
-
-    term_columns = shutil.get_terminal_size().columns
+    term_columns = args.width if args.width else shutil.get_terminal_size().columns
     daywidth = int(term_columns / len(dates)) - 5
     print(f"daywidth={daywidth}")
 
@@ -127,14 +129,17 @@ def main():
         active_columns[date] = []
 
     for t in range( strtime_to_int(start_time), strtime_to_int(stop_time), step):
-        # print(f"dates:{dates}")
+       # print(f"dates:{dates}")
         rowstr=""
         for date in dates:
             busy=False
             daystr=""
             for i in range(len(cal)):
-                item_name = cal[i]['title']
+                # if there are multiple items with the same name at the same time on different days, then duplicates get dropped
+                # this is a workaround, but #TODO to change to only when we need it
+                item_name = cal[i]['title'] + " " + str(i)
                 if cal[i]['start_date'] == date and (cal[i]['start_time_int'] <= t) and (cal[i]['end_time_int'] > t):
+                        # print(f"event is now:{cal[i]['title']}")
                         busy= True
                         if cal[i]['calendar'] == "Stephan Oberlin Merged":
                             color = PURPLEBG
