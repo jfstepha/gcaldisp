@@ -83,7 +83,7 @@ def main():
                 row[header[c]] = l[c]
 
             cal.append(row)
-        print(f"Line:{i}:{l}")
+        #print(f"Line:{i}:{l}")
         i+=1
 
 
@@ -100,13 +100,13 @@ def main():
             cal[i]['start_time_int'] = 0
             cal[i]['end_time_int'] = 0
 
-    print(f"calendar={cal}")
+    # print(f"calendar={cal}")
 
 
 
     term_columns = args.width if args.width else shutil.get_terminal_size().columns
     daywidth = int(term_columns / len(dates)) - 5
-    print(f"daywidth={daywidth}")
+    # print(f"daywidth={daywidth}")
 
     rowstr="      "
     for date in dates:
@@ -136,8 +136,9 @@ def main():
             daystr=""
             for i in range(len(cal)):
                 # if there are multiple items with the same name at the same time on different days, then duplicates get dropped
-                # this is a workaround, but #TODO to change to only when we need it
-                item_name = cal[i]['title'] + " " + str(i)
+                # this is a workaround, but #TODO to change to only when we need it.  Probably add an instance_name and do seaches
+                # based on that 
+                item_name = cal[i]['title'] + " "*500 + str(i)
                 if cal[i]['start_date'] == date and (cal[i]['start_time_int'] <= t) and (cal[i]['end_time_int'] > t):
                         # print(f"event is now:{cal[i]['title']}")
                         busy= True
